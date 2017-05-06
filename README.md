@@ -7,6 +7,10 @@ azurescens renders interactive fractal-like animations.
 Currently it is a simple toy, and a platform for experimentation. It will
 probably grow more behaviors over time.
 
+![Screenshot 1](assets/screenshots/shot1.png)
+
+![Screenshot 2](assets/screenshots/shot2.png)
+
 
 ## Quick start
 
