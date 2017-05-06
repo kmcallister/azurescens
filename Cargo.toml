@@ -11,3 +11,4 @@ authors = ["Keegan McAllister <mcallister.keegan@gmail.com>"]
 
 [dependencies]
 glium = "0.16"
+time = "0.1"

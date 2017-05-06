@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate glium;
+extern crate time;
 
 use std::mem;
 
@@ -139,6 +140,7 @@ fn main() {
                     src: &read_texture,
                     scale: SCALE,
                     param_c: param_c,
+                    param_t: time::precise_time_s() as f32,
                 };
 
                 let mut target = write_texture.as_surface();

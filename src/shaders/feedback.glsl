@@ -7,10 +7,18 @@ uniform sampler2D src;
 
 uniform float scale;
 uniform vec2 param_c;
+uniform float param_t;
 
 in vec2 frag_pos;
 
 out vec4 color;
+
+// Convert HSV colorspace to RGB.
+vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
 
 // Convert a position (-1, 1) x (-1, 1) to a complex number.
 vec2 pos_to_z(vec2 pos) {
@@ -45,7 +53,10 @@ void main() {
         || (zprev.y <= -0.9)
         || (zprev.y >= 0.9)) {
 
-        color += vec4(zprev.xy, 0.0, 1.0);
+        float x1 = 0.2*(2.0*cos(0.128*param_t + zprev.x) + 1.0);
+        float x2 = 2.0*sin(0.240*param_t + zprev.y) + 1.0;
+
+        color += vec4(hsv2rgb(vec3(x1, x2, 1.0)), 1.0);
     }
 
     // Final color mapping / inversion.
