@@ -48,10 +48,11 @@ void main() {
     color = texture(src, z_to_tex(zprev));
 
     // Color the borders, as an initial condition for the iteration.
-    if ((zprev.x <= -0.9)
-        || (zprev.x >= 0.9)
-        || (zprev.y <= -0.9)
-        || (zprev.y >= 0.9)) {
+    float lim = 0.9*scale;
+    if ((zprev.x <= -lim)
+        || (zprev.x >= lim)
+        || (zprev.y <= -lim)
+        || (zprev.y >= lim)) {
 
         float x1 = 0.2*(2.0*cos(0.128*param_t + zprev.x) + 1.0);
         float x2 = 2.0*sin(0.240*param_t + zprev.y) + 1.0;
