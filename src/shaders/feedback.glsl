@@ -54,10 +54,10 @@ void main() {
         || (zprev.y <= -lim)
         || (zprev.y >= lim)) {
 
-        float x1 = 0.2*(2.0*cos(0.128*param_t + zprev.x) + 1.0);
-        float x2 = 2.0*sin(0.240*param_t + zprev.y) + 1.0;
+        float h = 2.0*cos(0.128*param_t + 0.1*zprev.x) + 1.0;
+        float s = 0.6 + 0.2*(sin(0.240*param_t + zprev.y) + 1.0);
 
-        color += vec4(hsv2rgb(vec3(x1, x2, 1.0)), 1.0);
+        color += vec4(hsv2rgb(vec3(h, s, 1.0)), 1.0);
     }
 
     // Final color mapping / inversion.
