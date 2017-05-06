@@ -1,5 +1,11 @@
 [package]
 name = "azurescens"
+description = "Renders interactive fractal-like animations"
+repository = "https://github.com/kmcallister/azurescens"
+readme = "README.md"
+keywords = ["OpenGL", "fractal", "art", "trippy"]
+categories = ["multimedia::video", "visualization"]
+license = "MIT/Apache-2.0"
 version = "0.1.0"
 authors = ["Keegan McAllister <mcallister.keegan@gmail.com>"]
 
