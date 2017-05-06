@@ -1,5 +1,7 @@
 # azurescens
 
+![Travis CI badge](https://api.travis-ci.org/kmcallister/azurescens.svg?branch=master)
+
 azurescens renders interactive fractal-like animations.
 
 **Not recommended for people with photosensitive epilepsy!**
