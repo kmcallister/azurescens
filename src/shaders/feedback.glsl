@@ -35,7 +35,7 @@ void main() {
     // The central feedback equation.
     // z is the current fragment coordinate
     // zprev is where we get its color from in the previous frame.
-    vec2 zprev = cmult(z, z) + 0.5*param_c;
+    vec2 zprev = cmult(z, z) + 0.8*sin(param_c);
 
     color = texture(src, z_to_tex(zprev));
 
@@ -49,7 +49,7 @@ void main() {
     }
 
     // Final color mapping / inversion.
-    color = vec4(0.8 * vec3(1.0, 1.0, 1.0) - color.rgb, 1.0);
+    color = vec4(0.8 * vec3(1.0, 1.0, 1.0) - color.gbr, 1.0);
 }
 
 // vim: ft=glsl
