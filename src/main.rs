@@ -100,6 +100,7 @@ fn window_px_to_z(facade: &GlutinFacade, (x, y): (i32, i32))
 fn main() {
     // Create a glutin / glium window.
     let display = glium::glutin::WindowBuilder::new()
+        .with_title("a z u r e s c e n s".to_owned())
         .with_vsync()
         .build_glium()
         .unwrap();
