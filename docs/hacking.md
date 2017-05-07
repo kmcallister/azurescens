@@ -8,14 +8,18 @@ Each step of the feedback inverts colors, which produces a lot of the
 interesting structure. This is why we only render every other step to the
 screen; otherwise it would be far too blinky.
 
-The shader programs (as GLSL source code strings) are baked into the azurescens
-executable at compile time. This means the executable is self-contained and
-does not rely on any external files. However, it also means you need to
-recompile every time you change a shader. We plan to introduce a "dynamic
-shaders" option to speed up the code/build/run cycle.
-
 
 ## Experimentation and improvement
+
+By default, the shader programs are baked into the azurescens executable at
+compile time. This means the executable is self-contained and does not rely on
+any external files. If you are playing around with the shaders you should switch
+this behavior with a command like
+
+    cargo run --release --features dynamic-shaders
+
+This will read the shaders at runtime, greatly reducing the delay in trying out
+new things.
 
 The actual feedback function is implemented in `src/shaders/feedback.glsl`,
 which is probably the most interesting file in the whole project. This is a

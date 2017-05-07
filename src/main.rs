@@ -59,22 +59,18 @@ fn feedback_texture<F>(facade: &F) -> Texture2d
                      FEEDBACK_TEXTURE_SIZE).unwrap()
 }
 
-
-// Shaders, as GLSL source code. These are included at compile time, so
-// you don't need any files present at runtime. However it means you
-// need to recompile even if you've only changed a shader.
+// Shaders.
+#[macro_use]
+mod shader_loader;
 
 // Trivial vertex shader.
-const VERTEX_SHADER_SRC: &'static str
-    = include_str!("shaders/vertex.glsl");
+shader_loader!(vertex_shader_src, "shaders/vertex.glsl");
 
 // Simple fragment shader, used to copy a texture to the screen.
-const BLIT_SHADER_SRC: &'static str
-    = include_str!("shaders/blit.glsl");
+shader_loader!(blit_shader_src, "shaders/blit.glsl");
 
 // Fragment shader which runs video feedback between two textures.
-const FEEDBACK_SHADER_SRC: &'static str
-    = include_str!("shaders/feedback.glsl");
+shader_loader!(feedback_shader_src, "shaders/feedback.glsl");
 
 
 // The screen and the feedback textures are interpreted as
@@ -118,11 +114,13 @@ fn main() {
     let draw_params = Default::default();
 
     // Prepare shader programs.
+    let vertex_shader_src = vertex_shader_src();
+
     let blit_program = Program::from_source(&display,
-        VERTEX_SHADER_SRC, BLIT_SHADER_SRC, None).unwrap();
+        &vertex_shader_src, &blit_shader_src(), None).unwrap();
 
     let feedback_program = Program::from_source(&display,
-        VERTEX_SHADER_SRC, FEEDBACK_SHADER_SRC, None).unwrap();
+        &vertex_shader_src, &feedback_shader_src(), None).unwrap();
 
     // Clear the screen.
     let mut target = display.draw();
