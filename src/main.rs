@@ -132,6 +132,12 @@ fn main() {
     // Initial value for the complex parameter 'c'.
     let mut param_c = (0.3, 0.3);
 
+    // FPS tracking.
+    let mut last_frame_time = time::precise_time_ns();
+    let mut last_fps_output_time = last_frame_time;
+    let mut smoothed_fps = 0.0;
+    let fps_smoothing = 0.9;  // amount to keep for EWMA
+
     loop {
         // Run video feedback from one texture into the other.
         // We do this twice before drawing to the screen.
@@ -163,6 +169,18 @@ fn main() {
         target.draw(&vertex_buffer, &index_buffer, &blit_program,
                     &uniforms, &draw_params).unwrap();
         target.finish().unwrap();
+
+        // Update FPS.
+        let this_frame_time = time::precise_time_ns();
+        let instant_fps = 1e9 / ((this_frame_time - last_frame_time) as f32);
+        smoothed_fps = fps_smoothing * smoothed_fps
+                     + (1.0-fps_smoothing)*instant_fps;
+        last_frame_time = this_frame_time;
+
+        if (this_frame_time - last_fps_output_time) >= 5_000_000_000 {
+            println!("Frames per second: {:7.2}", smoothed_fps);
+            last_fps_output_time = this_frame_time;
+        }
 
         // Handle events.
         for ev in display.poll_events() {
