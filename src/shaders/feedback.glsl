@@ -43,7 +43,9 @@ void main() {
     // The central feedback equation.
     // z is the current fragment coordinate
     // zprev is where we get its color from in the previous frame.
-    vec2 zprev = cmult(z, z) + 0.8*sin(param_c);
+    vec2 zprev = cmult(z, z) + 1.2*sin(param_c);
+    float a = z_to_tex(param_c).y;
+    zprev.y = a*zprev.y + (1-a)*sin(zprev.y);
 
     color = texture(src, z_to_tex(zprev));
 
