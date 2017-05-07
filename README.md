@@ -41,8 +41,8 @@ build, you may be surprised when the window opens some minutes later!
 Try **moving the mouse** within the window to get different behaviors.
 
 azurescens is tested on Linux, but will quite likely work on other platforms.
-You will need OpenGL 3.0 or later. OpenGL ES will possibly work. Bottom line,
-try it and report back with your findings!
+You will need OpenGL 3.2 or later. OpenGL ES might work. Bottom line, try it
+and report back with your findings!
 
 
 ## The algorithm

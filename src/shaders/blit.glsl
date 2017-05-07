@@ -1,4 +1,4 @@
-#version 130
+#version 150
 
 // Simple fragment shader, used to copy a texture to the screen.
 
