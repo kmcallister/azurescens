@@ -46,36 +46,6 @@ this is somewhat negotiable if you change the version headers on the shaders.
 Bottom line, try it and report back with your findings!
 
 
-## The algorithm
-
-Here's how it works, in a nutshell.
-
-We interpret the screen as a region of the [complex plane] ℂ, for example
-
-> (-1 to 1) + (-1 to 1)*i*
-
-We pick a function *f*: ℂ → ℂ. Say we want to render a new frame of the
-animation. For each pixel, we interpret its coordinate as a complex number *z*.
-We then copy the color from the previous frame at the point *f*(*z*). We also
-draw some stuff on top in order to seed the iteration with interesting
-structure.
-
-A simple choice for *f* is
-
-> *f*(*z*) = *z*<sup>2</sup> + *c*
-
-for some complex parameter *c*. This produces images very similar to [Julia set
-fractals]. (The Julia set is the set of points for which repeated iteration of
-*f* does not fly off to infinity.)
-
-However, the animation also displays interesting non-equilibrium behavior, if
-we vary the parameter *c* in-between frames. In azurescens this is accomplished
-by moving the mouse. Skilled pilots can achieve some very interesting effects.
-
-[complex plane]: https://en.wikipedia.org/wiki/Complex_plane
-[Julia set fractals]: https://en.wikipedia.org/wiki/Julia_set
-
-
 ## Performance
 
 azurescens runs smooth as silk on my 2011-era non-gaming laptop, with Intel HD
@@ -90,44 +60,11 @@ If you've done these things and still run into performance issues, please let
 us know by [opening an issue on GitHub][issue].
 
 
-## Implementation details
+## More documentation
 
-The feedback happens between two OpenGL textures in a ping-pong fashion. These
-have a fixed square size, regardless of the size of the window or screen. It's
-determined by the constant `FEEDBACK_TEXTURE_SIZE` in `src/main.rs`.
+[**The algorithm**](docs/algorithm.md)
 
-Each step of the feedback inverts colors, which produces a lot of the
-interesting structure. This is why we only render every other step to the
-screen; otherwise it would be far too blinky.
-
-The shader programs (as GLSL source code strings) are baked into the azurescens
-executable at compile time. This means the executable is self-contained and
-does not rely on any external files. However, it also means you need to
-recompile every time you change a shader. We plan to introduce a "dynamic
-shaders" option to speed up the code/build/run cycle.
-
-
-## Experimentation and improvement
-
-The actual feedback function is implemented in `src/shaders/feedback.glsl`,
-which is probably the most interesting file in the whole project. This is a
-great place to start experimenting. There are a million different directions
-you can go with this basic idea. Pull requests will be accepted, especially if
-they add functionality without removing any. (We will need a mode-switching
-interface at some point.)
-
-Many ideas for improvement are available in the [issue tracker][issue]. See
-also some old articles:
-[1](http://wealoneonearth.blogspot.com/2007/09/more-fractal-video-feedback.html),
-[2](http://wealoneonearth.blogspot.com/2007/09/more-screenshots.html),
-[3](http://wealoneonearth.blogspot.com/2008/01/ezeiz-c_24.html),
-[4](http://wealoneonearth.blogspot.com/2008/01/ezeiz-c.html), and many others
-from that group blog.
-
-Long ago, I made [a similar program][phosphene] in x86-16 assembly which fits
-in a master boot record — 446 bytes.
-
-[phosphene]: https://github.com/kmcallister/phosphene
+[**How to hack on it**](docs/hacking.md)
 
 
 ## Shoutouts
