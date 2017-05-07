@@ -1,4 +1,4 @@
-#version 130
+#version 150
 
 // Fragment shader which runs video feedback between two textures.
 
