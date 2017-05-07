@@ -40,9 +40,10 @@ build, you may be surprised when the window opens some minutes later!
 
 Try **moving the mouse** within the window to get different behaviors.
 
-azurescens is tested on Linux, but will quite likely work on other platforms.
-You will need OpenGL 3.2 or later. OpenGL ES might work. Bottom line, try it
-and report back with your findings!
+azurescens has been tested on Linux, macOS Sierra (10.12), and Windows 10. It
+may work on other platforms too. You will need OpenGL 3.2 or later, although
+this is somewhat negotiable if you change the version headers on the shaders.
+Bottom line, try it and report back with your findings!
 
 
 ## The algorithm
