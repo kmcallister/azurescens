@@ -106,6 +106,9 @@ fn main() {
         .build_glium()
         .unwrap();
 
+    println!("OpenGL {:?}", display.get_opengl_version());
+    println!("GLSL   {:?}", display.get_supported_glsl_version());
+
     // Create two textures for feedback.
     let mut read_texture  = feedback_texture(&display);
     let mut write_texture = feedback_texture(&display);
