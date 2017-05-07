@@ -65,15 +65,15 @@ fn feedback_texture<F>(facade: &F) -> Texture2d
 // need to recompile even if you've only changed a shader.
 
 // Trivial vertex shader.
-const VERTEX_SHADER_SRC: &str
+const VERTEX_SHADER_SRC: &'static str
     = include_str!("shaders/vertex.glsl");
 
 // Simple fragment shader, used to copy a texture to the screen.
-const BLIT_SHADER_SRC: &str
+const BLIT_SHADER_SRC: &'static str
     = include_str!("shaders/blit.glsl");
 
 // Fragment shader which runs video feedback between two textures.
-const FEEDBACK_SHADER_SRC: &str
+const FEEDBACK_SHADER_SRC: &'static str
     = include_str!("shaders/feedback.glsl");
 
 
