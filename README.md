@@ -73,7 +73,7 @@ us know by [opening an issue on GitHub][issue].
 
 [**How to hack on it**](docs/hacking.md)
 
-[**Building for Android**](docs/android.md)
+[**Building for Android**][android]
 
 
 ## Shoutouts
