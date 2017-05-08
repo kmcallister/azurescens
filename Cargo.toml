@@ -17,4 +17,3 @@ image = "0.13"
 [features]
 default = []
 dynamic-shaders = []
-android = []

@@ -4,15 +4,7 @@ There is very preliminary support for building azurescens as an Android app.
 You will need Android 5.0 or later, which corresponds to OpenGL ES 3.1 or
 later.
 
-First, modify `Cargo.toml` like so:
-
-    [features]
-    default = ["android"]
-
-This is necessary because [`cargo apk`][cargo-apk] does not yet support
-`--features`.
-
-Then, run
+Basically you can just run
 
     ./android/build-and-install
 

@@ -1,9 +1,9 @@
 // Load shaders, as GLSL source code.
 
-#[cfg(feature = "android")]
+#[cfg(target_os = "android")]
 pub static GLSL_VERSION: &'static str = "#version 300 es\n\n";
 
-#[cfg(not(feature = "android"))]
+#[cfg(not(target_os = "android"))]
 pub static GLSL_VERSION: &'static str = "#version 150\n\n";
 
 #[cfg(feature = "dynamic-shaders")]

@@ -50,10 +50,10 @@ fn whole_surface_triangles<F>(facade: &F)
 
 
 // Size in pixels for the feedback textures.
-#[cfg(feature = "android")]
+#[cfg(target_os = "android")]
 const FEEDBACK_TEXTURE_SIZE: u32 = 1024;
 
-#[cfg(not(feature = "android"))]
+#[cfg(not(target_os = "android"))]
 const FEEDBACK_TEXTURE_SIZE: u32 = 2048;
 
 // Create a feedback texture.
@@ -124,13 +124,13 @@ fn screenshot(tex: &Texture2d) {
 }
 
 
-#[cfg(feature = "android")]
+#[cfg(target_os = "android")]
 fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
     use glium::glutin::{GlRequest, Api};
     bld.with_gl(GlRequest::Specific(Api::OpenGlEs, (3, 1)))
 }
 
-#[cfg(not(feature = "android"))]
+#[cfg(not(target_os = "android"))]
 fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
     bld
 }
