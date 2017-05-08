@@ -1,13 +1,16 @@
 #[macro_use]
 extern crate glium;
 extern crate time;
+extern crate image;
 
 use std::mem;
+use std::io;
+use std::io::Write;
 
 use glium::{DisplayBuild, Program, Surface, VertexBuffer, IndexBuffer};
-use glium::texture::Texture2d;
+use glium::texture::{Texture2d, RawImage2d, ClientFormat};
 use glium::index::PrimitiveType;
-use glium::glutin::Event;
+use glium::glutin::{Event, ElementState, VirtualKeyCode};
 use glium::backend::Facade;
 use glium::backend::glutin_backend::GlutinFacade;
 
@@ -91,6 +94,29 @@ fn window_px_to_z(facade: &GlutinFacade, (x, y): (i32, i32))
 
     (((x as f32) / ((sx-1) as f32) * 2.0 - 1.0) * SCALE,
      ((y as f32) / ((sy-1) as f32) * 2.0 - 1.0) * SCALE)
+}
+
+
+// Take a screenshot.
+fn screenshot(tex: &Texture2d) {
+    let raw_image: RawImage2d<u8> = tex.read();
+    assert_eq!(raw_image.format, ClientFormat::U8U8U8U8);
+
+    let image: image::ImageBuffer<image::Rgba<u8>, &[u8]>
+        = image::ImageBuffer::from_raw(
+            FEEDBACK_TEXTURE_SIZE, FEEDBACK_TEXTURE_SIZE,
+            &*raw_image.data).unwrap();
+
+    let path_string = format!("az_shot_{}.png", time::precise_time_ns());
+    match image.save(&path_string) {
+        Ok(()) => println!("Saved screenshot {}", path_string),
+
+        Err(e) => {
+            let _ = write!(&mut io::stderr(),
+                           "\nFAILED to save image {}: {}\n\n",
+                           path_string, e);
+        }
+    }
 }
 
 
@@ -184,11 +210,19 @@ fn main() {
         for ev in display.poll_events() {
             match ev {
                 Event::Closed => return,
+
                 Event::MouseMoved(x, y) => {
                     // Update the parameter 'c' according to
                     // the mouse position.
                     param_c = window_px_to_z(&display, (x,y));
                 }
+
+                Event::KeyboardInput(ElementState::Pressed,
+                                     _, Some(kc)) => match kc {
+                    VirtualKeyCode::S => screenshot(&read_texture),
+                    _ => (),
+                },
+
                 _ => (),
             }
         }

@@ -38,12 +38,19 @@ Then you can run azurescens with
 Actually, the `run` command by itself will rebuild as necessary. But on a first
 build, you may be surprised when the window opens some minutes later!
 
-Try **moving the mouse** within the window to get different behaviors.
-
 azurescens has been tested on Linux, macOS Sierra (10.12), and Windows 10. It
 may work on other platforms too. You will need OpenGL 3.2 or later, although
 this is somewhat negotiable if you change the version headers on the shaders.
 Bottom line, try it and report back with your findings!
+
+
+## User interface
+
+There is not much UI yet.
+
+Try **moving the mouse** within the window to get different behaviors.
+
+Press `s` to take a screenshot, as a PNG file in the current directory.
 
 
 ## Performance
