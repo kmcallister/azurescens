@@ -39,7 +39,7 @@ vec2 cmult(vec2 a, vec2 b) {
 
 // Complex modulus.
 float cmod(vec2 z) {
-    return sqrt(pow(z.x, 2) + pow(z.y, 2));
+    return length(z);
 }
 
 // Complex argument (principal).
