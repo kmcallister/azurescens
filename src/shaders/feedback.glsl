@@ -37,6 +37,21 @@ vec2 cmult(vec2 a, vec2 b) {
                 (a.x * b.y) + (a.y * b.x));
 }
 
+// Complex modulus.
+float cmod(vec2 z) {
+    return sqrt(pow(z.x, 2) + pow(z.y, 2));
+}
+
+// Complex argument (principal).
+float carg(vec2 z) {
+    return atan(z.y, z.x);
+}
+
+// Complex logarithm.
+vec2 clog(vec2 z) {
+    return vec2(log(cmod(z)), carg(z));
+}
+
 void main() {
     vec2 z = pos_to_z(frag_pos);
 
