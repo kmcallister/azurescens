@@ -1,5 +1,3 @@
-#version 150
-
 // Simple fragment shader, used to copy a texture to the screen.
 
 uniform sampler2D src;

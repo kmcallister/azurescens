@@ -1,0 +1,9 @@
+#!/bin/bash -xe
+
+docker run --rm -v $(pwd):/root/src -w /root/src tomaka/android-rs-glue cargo apk
+
+adb uninstall rust.azurescens
+
+adb install -r target/android-artifacts/build/bin/azurescens-debug.apk
+
+adb logcat | grep Rust

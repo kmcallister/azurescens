@@ -1,5 +1,3 @@
-#version 150
-
 // Trivial vertex shader.
 
 in vec2 pos;

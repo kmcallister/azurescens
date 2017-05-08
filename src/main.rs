@@ -10,7 +10,8 @@ use std::io::Write;
 use glium::{DisplayBuild, Program, Surface, VertexBuffer, IndexBuffer};
 use glium::texture::{Texture2d, RawImage2d, ClientFormat};
 use glium::index::PrimitiveType;
-use glium::glutin::{Event, ElementState, VirtualKeyCode};
+use glium::glutin::{Event, ElementState, VirtualKeyCode, WindowBuilder};
+use glium::glutin::{Touch, TouchPhase};
 use glium::backend::Facade;
 use glium::backend::glutin_backend::GlutinFacade;
 
@@ -49,8 +50,11 @@ fn whole_surface_triangles<F>(facade: &F)
 
 
 // Size in pixels for the feedback textures.
-const FEEDBACK_TEXTURE_SIZE: u32
-    = 2048;
+#[cfg(feature = "android")]
+const FEEDBACK_TEXTURE_SIZE: u32 = 1024;
+
+#[cfg(not(feature = "android"))]
+const FEEDBACK_TEXTURE_SIZE: u32 = 2048;
 
 // Create a feedback texture.
 fn feedback_texture<F>(facade: &F) -> Texture2d
@@ -86,14 +90,14 @@ const SCALE: f32 = 1.4;
 // Convert a window position in pixels to a complex number.
 //
 // TODO: Is it slow to look up the size on every mouse move?
-fn window_px_to_z(facade: &GlutinFacade, (x, y): (i32, i32))
+fn window_px_to_z(facade: &GlutinFacade, (x, y): (f32, f32))
     -> (f32, f32)
 {
     let window = facade.get_window().unwrap();
     let (sx, sy) = window.get_inner_size().unwrap();
 
-    (((x as f32) / ((sx-1) as f32) * 2.0 - 1.0) * SCALE,
-     ((y as f32) / ((sy-1) as f32) * 2.0 - 1.0) * SCALE)
+    ((x / ((sx-1) as f32) * 2.0 - 1.0) * SCALE,
+     (y / ((sy-1) as f32) * 2.0 - 1.0) * SCALE)
 }
 
 
@@ -120,13 +124,24 @@ fn screenshot(tex: &Texture2d) {
 }
 
 
+#[cfg(feature = "android")]
+fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
+    use glium::glutin::{GlRequest, Api};
+    bld.with_gl(GlRequest::Specific(Api::OpenGlEs, (3, 1)))
+}
+
+#[cfg(not(feature = "android"))]
+fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
+    bld
+}
+
 fn main() {
     // Create a glutin / glium window.
-    let display = glium::glutin::WindowBuilder::new()
+    let display_builder = WindowBuilder::new()
         .with_title("a z u r e s c e n s".to_owned())
-        .with_vsync()
-        .build_glium()
-        .unwrap();
+        .with_vsync();
+
+    let display = request_gl_version(display_builder).build_glium().unwrap();
 
     println!("OpenGL {:?}", display.get_opengl_version());
     println!("GLSL   {:?}", display.get_supported_glsl_version());
@@ -214,8 +229,17 @@ fn main() {
                 Event::MouseMoved(x, y) => {
                     // Update the parameter 'c' according to
                     // the mouse position.
-                    param_c = window_px_to_z(&display, (x,y));
+                    param_c = window_px_to_z(&display, (x as f32, y as f32));
                 }
+
+                Event::Touch(t) => match t {
+                      Touch { phase: TouchPhase::Started, location: (x, y), .. }
+                    | Touch { phase: TouchPhase::Moved,   location: (x, y), .. } => {
+                        param_c = window_px_to_z(&display, (x as f32, y as f32));
+                    }
+
+                    _ => (),
+                },
 
                 Event::KeyboardInput(ElementState::Pressed,
                                      _, Some(kc)) => match kc {

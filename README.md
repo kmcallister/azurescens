@@ -38,10 +38,10 @@ Then you can run azurescens with
 Actually, the `run` command by itself will rebuild as necessary. But on a first
 build, you may be surprised when the window opens some minutes later!
 
-azurescens has been tested on Linux, macOS Sierra (10.12), and Windows 10. It
-may work on other platforms too. You will need OpenGL 3.2 or later, although
-this is somewhat negotiable if you change the version headers on the shaders.
-Bottom line, try it and report back with your findings!
+azurescens has been tested on Linux, macOS Sierra (10.12), and Windows 10. You
+will need OpenGL 3.2 or later.
+
+There is also [preliminary support for Android][android].
 
 
 ## User interface
@@ -73,6 +73,8 @@ us know by [opening an issue on GitHub][issue].
 
 [**How to hack on it**](docs/hacking.md)
 
+[**Building for Android**](docs/android.md)
+
 
 ## Shoutouts
 
@@ -92,3 +94,4 @@ people](https://thanks.rust-lang.org/rust/all-time) who have made Rust what it
 is today.
 
 [issue]: https://github.com/kmcallister/azurescens/issues
+[android]: docs/android.md

@@ -1,11 +1,13 @@
 // Load shaders, as GLSL source code.
 
-use std::borrow::Cow;
+#[cfg(feature = "android")]
+pub static GLSL_VERSION: &'static str = "#version 300 es\n\n";
 
-pub type ShaderSrc = Cow<'static, str>;
+#[cfg(not(feature = "android"))]
+pub static GLSL_VERSION: &'static str = "#version 150\n\n";
 
 #[cfg(feature = "dynamic-shaders")]
-pub fn load_dynamic_shader(which: &str) -> ShaderSrc {
+pub fn load_dynamic_shader(which: &str) -> String {
     use std::io;
     use std::io::Write;
     use std::path::PathBuf;
@@ -13,15 +15,15 @@ pub fn load_dynamic_shader(which: &str) -> ShaderSrc {
     let mut path = PathBuf::from("src/");
     path.push(which);
 
-    let inner = || -> Result<ShaderSrc, io::Error> {
+    let inner = || -> Result<String, io::Error> {
         use std::io::prelude::*;
         use std::fs::File;
 
         let mut file = File::open(&path)?;
-        let mut buffer = String::new();
+        let mut buffer = String::from(GLSL_VERSION);
         file.read_to_string(&mut buffer)?;
 
-        Ok(Cow::Owned(buffer))
+        Ok(buffer)
     };
 
     match inner() {
@@ -38,13 +40,12 @@ pub fn load_dynamic_shader(which: &str) -> ShaderSrc {
 macro_rules! shader_loader {
     ($name:ident, $path:expr) => {
         #[cfg(not(feature = "dynamic-shaders"))]
-        fn $name() -> shader_loader::ShaderSrc {
-            use std::borrow::Cow;
-            Cow::Borrowed(include_str!($path))
+        fn $name() -> String {
+            format!("{}{}", shader_loader::GLSL_VERSION, include_str!($path))
         }
 
         #[cfg(feature = "dynamic-shaders")]
-        fn $name() -> shader_loader::ShaderSrc {
+        fn $name() -> String {
             shader_loader::load_dynamic_shader($path)
         }
     }
