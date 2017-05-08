@@ -10,7 +10,8 @@ use std::io::Write;
 use glium::{DisplayBuild, Program, Surface, VertexBuffer, IndexBuffer};
 use glium::texture::{Texture2d, RawImage2d, ClientFormat};
 use glium::index::PrimitiveType;
-use glium::glutin::{Event, ElementState, VirtualKeyCode};
+use glium::glutin;
+use glium::glutin::{Event, ElementState, VirtualKeyCode, WindowBuilder};
 use glium::backend::Facade;
 use glium::backend::glutin_backend::GlutinFacade;
 
@@ -120,13 +121,17 @@ fn screenshot(tex: &Texture2d) {
 }
 
 
-fn main() {
-    // Create a glutin / glium window.
-    let display = glium::glutin::WindowBuilder::new()
+// Builder for a glutin / glium window.
+fn window_builder() -> WindowBuilder<'static> {
+    glium::glutin::WindowBuilder::new()
         .with_title("a z u r e s c e n s".to_owned())
         .with_vsync()
-        .build_glium()
-        .unwrap();
+}
+
+fn main() {
+    // Create a glutin / glium window.
+    let mut fullscreen = false;
+    let display = window_builder().build_glium().unwrap();
 
     println!("OpenGL {:?}", display.get_opengl_version());
     println!("GLSL   {:?}", display.get_supported_glsl_version());
@@ -220,6 +225,19 @@ fn main() {
                 Event::KeyboardInput(ElementState::Pressed,
                                      _, Some(kc)) => match kc {
                     VirtualKeyCode::S => screenshot(&read_texture),
+
+                    VirtualKeyCode::F => {
+                        fullscreen = !fullscreen;
+
+                        let mut builder = window_builder();
+
+                        if fullscreen {
+                            builder = builder.with_fullscreen(
+                                glutin::get_primary_monitor())
+                        }
+
+                        builder.rebuild_glium(&display).unwrap();
+                    }
                     _ => (),
                 },
 
