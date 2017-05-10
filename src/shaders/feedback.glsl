@@ -3,7 +3,8 @@
 precision mediump float;
 
 // Source texture (previous frame)
-uniform sampler2D src;
+uniform sampler2D src_near;  // Nearest-pixel sampling
+uniform sampler2D src_lin;   // Linear interpolation
 
 uniform float scale;
 uniform vec2 param_c;
@@ -62,7 +63,9 @@ void main() {
     float a = z_to_tex(param_c).y;
     zprev.y = mix(sin(zprev.y), zprev.y, a);
 
-    color = texture(src, z_to_tex(zprev));
+    vec2 zt = z_to_tex(zprev);
+    color = mix(texture(src_near, zt), texture(src_lin, zt),
+        0.2*fract(0.1*param_t));
 
     // Color the borders, as an initial condition for the iteration.
     float lim = 0.9*scale;

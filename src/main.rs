@@ -186,8 +186,10 @@ fn main() {
         for _ in 0..2 {
             {
                 let uniforms = uniform! {
-                    src: Sampler::new(&read_texture)
-                             .magnify_filter(MagnifySamplerFilter::Nearest),
+                    src_near: Sampler::new(&read_texture)
+                               .magnify_filter(MagnifySamplerFilter::Nearest),
+                    src_lin: Sampler::new(&read_texture)
+                               .magnify_filter(MagnifySamplerFilter::Linear),
                     scale: SCALE,
                     param_c: param_c,
                     param_t: time::precise_time_s() as f32,
