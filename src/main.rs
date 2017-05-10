@@ -14,6 +14,7 @@ use glium::glutin::{Event, ElementState, VirtualKeyCode, WindowBuilder};
 use glium::glutin::{Touch, TouchPhase};
 use glium::backend::Facade;
 use glium::backend::glutin_backend::GlutinFacade;
+use glium::uniforms::{Sampler, MagnifySamplerFilter};
 
 // Our vertices are boring. We only ever draw 2 triangles
 // covering the whole surface.
@@ -185,7 +186,8 @@ fn main() {
         for _ in 0..2 {
             {
                 let uniforms = uniform! {
-                    src: &read_texture,
+                    src: Sampler::new(&read_texture)
+                             .magnify_filter(MagnifySamplerFilter::Nearest),
                     scale: SCALE,
                     param_c: param_c,
                     param_t: time::precise_time_s() as f32,
