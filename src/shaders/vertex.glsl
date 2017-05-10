@@ -1,5 +1,7 @@
 // Trivial vertex shader.
 
+precision mediump float;
+
 in vec2 pos;
 out vec2 frag_pos;
 

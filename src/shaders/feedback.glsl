@@ -1,5 +1,7 @@
 // Fragment shader which runs video feedback between two textures.
 
+precision mediump float;
+
 // Source texture (previous frame)
 uniform sampler2D src;
 

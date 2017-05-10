@@ -1,5 +1,7 @@
 // Simple fragment shader, used to copy a texture to the screen.
 
+precision mediump float;
+
 uniform sampler2D src;
 
 in vec2 frag_pos;
