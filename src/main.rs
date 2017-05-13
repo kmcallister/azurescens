@@ -5,9 +5,18 @@ extern crate glium;
 extern crate time;
 extern crate image;
 
+#[macro_use]
+extern crate serde_derive;
+
+#[macro_use]
+extern crate tunapanel;
+
 use std::mem;
 use std::io;
 use std::io::Write;
+use std::thread;
+use std::sync::{Arc, Mutex};
+use std::default::Default;
 
 use glium::{DisplayBuild, Program, Surface, VertexBuffer, IndexBuffer};
 use glium::texture::{Texture2d, RawImage2d, ClientFormat};
@@ -17,6 +26,10 @@ use glium::glutin::{Touch, TouchPhase};
 use glium::backend::Facade;
 use glium::backend::glutin_backend::GlutinFacade;
 use glium::uniforms::{Sampler, MagnifySamplerFilter};
+
+use params::Params;
+
+mod params;
 
 // Our vertices are boring. We only ever draw 2 triangles
 // covering the whole surface.
@@ -139,6 +152,17 @@ fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
 }
 
 fn main() {
+    // Create params struct.
+    let param_shared = Arc::new(Mutex::new(Params::default()));
+    let param_for_thread = param_shared.clone();
+
+    // Start up control panel.
+    thread::spawn(|| {
+        tunapanel::serve::<Params, _>(move |p| {
+            *param_for_thread.lock().unwrap() = p;
+        }).unwrap();
+    });
+
     // Create a glutin / glium window.
     let display_builder = WindowBuilder::new()
         .with_title("a z u r e s c e n s".to_owned())
@@ -187,14 +211,19 @@ fn main() {
         // we want to avoid a distracting blinky effect.
         for _ in 0..2 {
             {
-                let uniforms = uniform! {
-                    src_near: Sampler::new(&read_texture)
-                               .magnify_filter(MagnifySamplerFilter::Nearest),
-                    src_lin: Sampler::new(&read_texture)
-                               .magnify_filter(MagnifySamplerFilter::Linear),
-                    scale: SCALE,
-                    param_c: param_c,
-                    param_t: time::precise_time_s() as f32,
+                let uniforms = {
+                    let params = param_shared.lock().unwrap();
+
+                    uniform! {
+                        src_near: Sampler::new(&read_texture)
+                                   .magnify_filter(MagnifySamplerFilter::Nearest),
+                        src_lin: Sampler::new(&read_texture)
+                                   .magnify_filter(MagnifySamplerFilter::Linear),
+                        scale: SCALE,
+                        param_c: param_c,
+                        param_t: time::precise_time_s() as f32,
+                        invert: params.invert,
+                    }
                 };
 
                 let mut target = write_texture.as_surface();

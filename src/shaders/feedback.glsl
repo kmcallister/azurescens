@@ -9,6 +9,7 @@ uniform sampler2D src_lin;   // Linear interpolation
 uniform float scale;
 uniform vec2 param_c;
 uniform float param_t;
+uniform bool invert;
 
 in vec2 frag_pos;
 
@@ -81,7 +82,13 @@ void main() {
     }
 
     // Final color mapping / inversion.
-    color = vec4(0.8 * vec3(1.0, 1.0, 1.0) - color.gbr, 1.0);
+    if (invert) {
+        color = vec4(vec3(1.0, 1.0, 1.0) - color.rgb, 1.0);
+    } else {
+        color = vec4(0.9*color.rgb, 1.0);
+    }
+
+    color = vec4(color.gbr, 1.0);
 }
 
 // vim: ft=glsl

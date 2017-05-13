@@ -13,6 +13,9 @@ authors = ["Keegan McAllister <mcallister.keegan@gmail.com>"]
 glium = "0.16"
 time = "0.1"
 image = "0.13"
+serde = "1"
+serde_derive = "1"
+tunapanel = "0.1.1"
 
 [features]
 default = []
