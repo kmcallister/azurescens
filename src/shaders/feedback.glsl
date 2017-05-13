@@ -10,6 +10,11 @@ uniform float scale;
 uniform vec2 param_c;
 uniform float param_t;
 uniform bool invert;
+uniform bool permute_colors;
+uniform float fade;
+uniform float color_cycle_rate;
+uniform float mix_linear;
+uniform float mix_linear_tv;
 
 in vec2 frag_pos;
 
@@ -66,7 +71,7 @@ void main() {
 
     vec2 zt = z_to_tex(zprev);
     color = mix(texture(src_near, zt), texture(src_lin, zt),
-        0.2*fract(0.1*param_t));
+        mix_linear + mix_linear_tv*fract(0.1*param_t));
 
     // Color the borders, as an initial condition for the iteration.
     float lim = 0.9*scale;
@@ -75,8 +80,8 @@ void main() {
         || (zprev.y <= -lim)
         || (zprev.y >= lim)) {
 
-        float h = 2.0*cos(0.128*param_t + 0.1*zprev.x) + 1.0;
-        float s = 0.6 + 0.2*(sin(0.240*param_t + zprev.y) + 1.0);
+        float h = 2.0*cos(0.128*color_cycle_rate*param_t + 0.1*zprev.x) + 1.0;
+        float s = 0.6 + 0.2*(sin(0.240*color_cycle_rate*param_t + zprev.y) + 1.0);
 
         color += vec4(hsv2rgb(vec3(h, s, 1.0)), 1.0);
     }
@@ -85,10 +90,12 @@ void main() {
     if (invert) {
         color = vec4(vec3(1.0, 1.0, 1.0) - color.rgb, 1.0);
     } else {
-        color = vec4(0.9*color.rgb, 1.0);
+        color = vec4(fade*color.rgb, 1.0);
     }
 
-    color = vec4(color.gbr, 1.0);
+    if (permute_colors) {
+        color = vec4(color.gbr, 1.0);
+    }
 }
 
 // vim: ft=glsl

@@ -158,7 +158,7 @@ fn main() {
 
     // Start up control panel.
     thread::spawn(|| {
-        tunapanel::serve::<Params, _>(move |p| {
+        tunapanel::serve(move |p: Params| {
             *param_for_thread.lock().unwrap() = p;
         }).unwrap();
     });
@@ -223,6 +223,11 @@ fn main() {
                         param_c: param_c,
                         param_t: time::precise_time_s() as f32,
                         invert: params.invert,
+                        permute_colors: params.permute_colors,
+                        fade: params.fade,
+                        color_cycle_rate: params.color_cycle_rate,
+                        mix_linear: params.mix_linear,
+                        mix_linear_tv: params.mix_linear_tv,
                     }
                 };
 
