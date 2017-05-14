@@ -12,14 +12,12 @@ extern crate serde_derive;
 extern crate tunapanel;
 
 use std::mem;
-use std::io;
-use std::io::Write;
 use std::thread;
 use std::sync::{Arc, Mutex};
 use std::default::Default;
 
 use glium::{DisplayBuild, Program, Surface, VertexBuffer, IndexBuffer};
-use glium::texture::{Texture2d, RawImage2d, ClientFormat};
+use glium::texture::Texture2d;
 use glium::index::PrimitiveType;
 use glium::glutin::{Event, ElementState, VirtualKeyCode, WindowBuilder};
 use glium::glutin::{Touch, TouchPhase};
@@ -29,9 +27,11 @@ use glium::uniforms::{Sampler, MagnifySamplerFilter};
 
 use params::Params;
 use fps::FPSTracker;
+use screenshot::screenshot;
 
 mod params;
 mod fps;
+mod screenshot;
 
 // Our vertices are boring. We only ever draw 2 triangles
 // covering the whole surface.
@@ -116,29 +116,6 @@ fn window_px_to_z(facade: &GlutinFacade, (x, y): (f32, f32))
 
     ((x / ((sx-1) as f32) * 2.0 - 1.0) * SCALE,
      (y / ((sy-1) as f32) * 2.0 - 1.0) * SCALE)
-}
-
-
-// Take a screenshot.
-fn screenshot(tex: &Texture2d) {
-    let raw_image: RawImage2d<u8> = tex.read();
-    assert_eq!(raw_image.format, ClientFormat::U8U8U8U8);
-
-    let image: image::ImageBuffer<image::Rgba<u8>, &[u8]>
-        = image::ImageBuffer::from_raw(
-            FEEDBACK_TEXTURE_SIZE, FEEDBACK_TEXTURE_SIZE,
-            &*raw_image.data).unwrap();
-
-    let path_string = format!("az_shot_{}.png", time::precise_time_ns());
-    match image.save(&path_string) {
-        Ok(()) => println!("Saved screenshot {}", path_string),
-
-        Err(e) => {
-            let _ = write!(&mut io::stderr(),
-                           "\nFAILED to save image {}: {}\n\n",
-                           path_string, e);
-        }
-    }
 }
 
 
