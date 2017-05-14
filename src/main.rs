@@ -28,8 +28,10 @@ use glium::backend::glutin_backend::GlutinFacade;
 use glium::uniforms::{Sampler, MagnifySamplerFilter};
 
 use params::Params;
+use fps::FPSTracker;
 
 mod params;
+mod fps;
 
 // Our vertices are boring. We only ever draw 2 triangles
 // covering the whole surface.
@@ -199,10 +201,7 @@ fn main() {
     let mut param_c = (0.3, 0.3);
 
     // FPS tracking.
-    let mut last_frame_time = time::precise_time_ns();
-    let mut last_fps_output_time = last_frame_time;
-    let mut smoothed_fps = 0.0;
-    let fps_smoothing = 0.9;  // amount to keep for EWMA
+    let mut fps = FPSTracker::new();
 
     loop {
         // Run video feedback from one texture into the other.
@@ -250,16 +249,7 @@ fn main() {
         target.finish().unwrap();
 
         // Update FPS.
-        let this_frame_time = time::precise_time_ns();
-        let instant_fps = 1e9 / ((this_frame_time - last_frame_time) as f32);
-        smoothed_fps = fps_smoothing * smoothed_fps
-                     + (1.0-fps_smoothing)*instant_fps;
-        last_frame_time = this_frame_time;
-
-        if (this_frame_time - last_fps_output_time) >= 5_000_000_000 {
-            println!("Frames per second: {:7.2}", smoothed_fps);
-            last_fps_output_time = this_frame_time;
-        }
+        fps.tick();
 
         // Handle events.
         for ev in display.poll_events() {
