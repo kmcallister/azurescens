@@ -1,6 +1,6 @@
 # azurescens
 
-![Travis CI badge](https://api.travis-ci.org/kmcallister/azurescens.svg?branch=master)
+[![Travis CI badge](https://api.travis-ci.org/kmcallister/azurescens.svg?branch=master)](https://travis-ci.org/kmcallister/azurescens)
 
 azurescens renders interactive fractal-like animations.
 
