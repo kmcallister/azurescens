@@ -17,6 +17,11 @@ serde = "1"
 serde_derive = "1"
 tunapanel = "0.1.1"
 
+[dev-dependencies]
+log = "0.3"
+env_logger = "0.4"
+tempfile = "2"
+
 [features]
 default = []
 dynamic-shaders = []
