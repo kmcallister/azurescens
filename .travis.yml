@@ -1,5 +1,5 @@
 language: rust
 rust:
   - stable
-  - beta
+# - beta     # Disabled for rustc 1.18.0-beta due to rust-lang/rust#41604
   - nightly
