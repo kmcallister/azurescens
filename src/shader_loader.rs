@@ -9,7 +9,6 @@ pub static GLSL_VERSION: &'static str = "#version 150\n\n";
 #[cfg(feature = "dynamic-shaders")]
 pub fn load_dynamic_shader(which: &str) -> String {
     use std::io;
-    use std::io::Write;
     use std::path::PathBuf;
 
     let mut path = PathBuf::from("src/");
@@ -29,9 +28,7 @@ pub fn load_dynamic_shader(which: &str) -> String {
     match inner() {
         Ok(s) => s,
         Err(e) => {
-            let _ = write!(&mut io::stderr(),
-                           "\nERROR: Could not load shader {}\n\n",
-                           path.to_string_lossy());
+            error!("Could not load shader {}", path.to_string_lossy());
             panic!("{}", e)
         }
     }

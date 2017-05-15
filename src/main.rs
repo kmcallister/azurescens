@@ -1,9 +1,14 @@
 #![deny(warnings)]
 
-#[macro_use]
-extern crate glium;
 extern crate time;
 extern crate image;
+extern crate env_logger;
+
+#[macro_use]
+extern crate log;
+
+#[macro_use]
+extern crate glium;
 
 #[macro_use]
 extern crate serde_derive;
@@ -131,6 +136,8 @@ fn request_gl_version(bld: WindowBuilder) -> WindowBuilder {
 }
 
 fn main() {
+    env_logger::init().unwrap();
+
     // Create params struct.
     let param_shared = Arc::new(Mutex::new(Params::default()));
     let param_for_thread = param_shared.clone();

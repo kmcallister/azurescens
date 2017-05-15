@@ -1,5 +1,3 @@
-use std::io;
-use std::io::Write;
 use glium::texture::{Texture2d, RawImage2d, ClientFormat};
 use time;
 use image;
@@ -19,11 +17,6 @@ pub fn screenshot(tex: &Texture2d) {
     let path_string = format!("az_shot_{}.png", time::precise_time_ns());
     match image.save(&path_string) {
         Ok(()) => println!("Saved screenshot {}", path_string),
-
-        Err(e) => {
-            let _ = write!(&mut io::stderr(),
-                           "\nFAILED to save image {}: {}\n\n",
-                           path_string, e);
-        }
+        Err(e) => error!("FAILED to save image {}: {}", path_string, e),
     }
 }
